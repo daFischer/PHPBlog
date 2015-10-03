@@ -1,3 +1,8 @@
 <div id="main">
-	Main Stuff
+	Main Stuff<br>
+	<?php
+	require_once("PostLoader.php");
+	PostLoader::loadPosts(10);
+	PostLoader::showPosts();
+	?>
 </div>
