@@ -1,0 +1,39 @@
+html{
+    min-height:100%;/* make sure it is at least as tall as the viewport */
+    position:relative;
+}
+body {
+	height: 100%;
+	background-color: #cef;
+	margin: 0%;
+}
+#main {
+	margin-top: 50px;
+}
+#footer {
+	bottom: 0%;
+	position: absolute;
+}
+#header {
+	top: 0%;
+	position: fixed;
+	z-index: 1;
+}
+#footer, #header {
+	left:0%;
+	right:0%;
+	height: 50px;
+	line-height: 50px;
+
+	background-color: #f80;
+
+	font-family: 'Oswald';
+	color: #fff;
+	text-align: center;
+	font-size: 30px;
+}
+#footer > span {
+	display: inline-block;
+	vertical-align: middle;
+	line-height: normal;
+}
