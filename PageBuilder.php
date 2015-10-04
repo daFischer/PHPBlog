@@ -37,11 +37,11 @@ class PageBuilder
 		$postString = "";
 		for($i = 0; $i < sizeof($postArray); $i++)
 		{
-			//if($i != 0)
+			if($i != 0)
 				$postString .= $this->loadFile("separator.html");
 			$postString .= $this->postSubstitution($this->loadFile("post.html"), $postArray[$i]);
 		}
-		$this->pageString = str_replace("[posts]", $postString."test", $this->pageString);
+		$this->pageString = str_replace("[posts]", $postString, $this->pageString);
 		$this->pageString = str_replace("[head]", "", $this->pageString);
 	}
 	private function postSubstitution($postString, $values)

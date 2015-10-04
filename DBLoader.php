@@ -22,6 +22,13 @@ class DBLoader
 					'html' => file_get_contents("./entries/1/First.html"),
 					'js' => file_get_contents("./entries/1/First.js"),
 					'css' => file_get_contents("./entries/1/First.css"));
+		$posts[1] = array(
+					'index' => 2,
+					'title' => "Second",
+					'date' => "4. Oct. 15",
+					'html' => file_get_contents("./entries/2/Second.html"),
+					'js' => file_get_contents("./entries/2/Second.js"),
+					'css' => file_get_contents("./entries/2/Second.css"));
 		return $posts;
 	}
 	
