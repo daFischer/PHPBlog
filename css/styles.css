@@ -8,7 +8,9 @@ body {
 	margin: 0%;
 }
 #main {
+	float: left;
 	margin-top: 100px;
+	margin-bottom: 100px;
 	margin-left: 20%;
 	width: 60%;
 }
@@ -45,10 +47,30 @@ body {
 	margin-top: 30px;
 	background-color: #f80;
 }
-h2 {
+h1, h2, h3, h4 {
 	font-family: 'Oswald';
+}
+h1, h2 {
 	text-align: center;
+}
+h1 {
+	font-size: 35px;
+}
+h2 {
 	font-size: 30px;
+}
+h3 {
+	font-size: 25px;
+}
+h4 {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	font-size: 20px;
+}
+p {
+	margin: 0px;
+}
+.postHeader {
 	width: 90%;
 }
 .post {
@@ -56,6 +78,7 @@ h2 {
 	margin-left: 5%;
 	text-align: left;
 	font-family: 'Hind';
+	line-height: 25px;
 	font-size: 20px;
 }
 .date {

@@ -5,65 +5,94 @@
 */
 class DBLoader
 {
-	static public function loadPosts($amount)
+	static public function loadPage($amount)
 	{
 		$page = $_GET["p"];
 		if (!$page)
 			$page = 1;
 
-		// TODO: Query database
+		$dirs = self::getDirs();
+		// remove newest post, since it's still in testing
+		array_shift($dirs);
+		// Also remove enough posts that only one page full (10) are left
+		while (sizeof($dirs) > 10)
+			array_pop($dirs);
 
-		// for testing, just return some default values
-		$posts = array();
-		$posts[0] = array(
-					'index' => 1,
-					'title' => "First",
-					'date' => "3. Oct. 15",
-					'html' => file_get_contents("./entries/1/First.html"),
-					'js' => file_get_contents("./entries/1/First.js"),
-					'css' => file_get_contents("./entries/1/First.css"));
-		$posts[1] = array(
-					'index' => 2,
-					'title' => "Second",
-					'date' => "4. Oct. 15",
-					'html' => file_get_contents("./entries/2/Second.html"),
-					'js' => file_get_contents("./entries/2/Second.js"),
-					'css' => file_get_contents("./entries/2/Second.css"));
-		return $posts;
+		return self::loadPosts($dirs);
 	}
-	
-	/* *
-	 * 
-	 *
-	static public function showPosts()
+	static public function loadDebugPost()
 	{
-		for ($i = 0; $i < sizeof(self::$posts); $i++)
-		{
-			if ($i != 0)
-				echo file_get_contents("./Separator.html");
-			$index = self::$posts[$i]['index'];
-			$title = self::$posts[$i]['title'];
-			$date = self::$posts[$i]['date'];
-			$filename = "./entries/".$index."/".$title;
-			if (!file_exists("./Post.html") || !file_exists($filename.".html"))
-			{
-				//echo " not found";
+		$dirs = self::getDirs();
+		// Use the newest post for testing and "0" to make sure nothing's broken
+		$a = array_shift($dirs);
+		$dirs = array($a, "0");
+
+		return self::loadPosts($dirs, true);
+	}
+
+	static public function loadPosts($indices, $debugging = false)
+	{
+		$posts = array();
+		for ($i = 0; $i < sizeof($indices); $i++) {
+			$id = intval($indices[$i]);
+			$files = glob("./entries/".$id."/*.html");
+			if (!$files || (sizeof($files) == 0)) {
 				continue;
 			}
-			$html = file_get_contents($filename.".html");
-			$js = $css = "";
-			if (file_exists($filename.".js"))
-				$js = file_get_contents($filename.".js");
-			if (file_exists($filename.".js"))
-				$css = file_get_contents($filename.".css");
-			$post = file_get_contents("./Post.html");
-			$post = str_replace("[index]", $index, $post);
-			$post = str_replace("[title]", $title, $post);
-			$post = str_replace("[date]", $date, $post);
-			$post = str_replace("[html]", $html, $post);
-			echo $post;
+			$title = substr($files[0], strlen("./entries/".$id."/"), -5);
+			if ($debugging)
+				$date = date("j\. M\. y");
+			else
+				$date = self::creationDate("entries/".$id);
+			$js = "";
+			if (file_exists("./entries/".$id."/".$title.".js"))
+				$js = file_get_contents("./entries/".$id."/".$title.".js");
+			$css = "";
+			if (file_exists("./entries/".$id."/".$title.".css"))
+				$css = file_get_contents("./entries/".$id."/".$title.".css");
+			$posts[] = array(
+				'index' => $id,
+				'title' => $title,
+				'date' => $date,
+				'html' => file_get_contents("./entries/".$id."/".$title.".html"),
+				'js' => $js,
+				'css' => $css);
 		}
-	}*/
+		return $posts;
+	}
+
+	static private function getDirs()
+	{
+		// Only use directories for entries that have their index as folder name
+		// and don't load 0, since that's a test post
+		function isDir($a) {
+			return is_dir("./entries/".$a) && ((intval($a) != 0));
+		}
+		$dirs = array_values(array_filter(scandir("./entries"), "isDir"));
+
+		// sort all posts, putting the newest posts in the front
+		function sortPosts($a, $b) {
+			return intval($b) - intval($a);
+		}
+		usort($dirs, "sortPosts");
+		return $dirs;
+	}
+	static private function creationDate($path)
+	{
+		if(file_exists($path."/publish.time")) {
+			$date = file_get_contents($path."/publish.time");
+			return $date;
+		}
+		else {
+			$date = date("j\. M\. y");
+			$myfile = fopen($path."/publish.time", "w");
+			if ($myfile) {
+				fwrite($myfile, $date);
+				fclose($myfile); 
+			}
+			return $date;
+		}
+	}
 }
 
 
