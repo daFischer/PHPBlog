@@ -13,6 +13,8 @@ if ($uri_end)
 if (preg_match("/^[a-zA-Z]+\.css$/", $uri)) {
 
 	// A css file has been recognized
+	header("Content-Type: text/css");
+	header("X-Content-Type-Options: nosniff");
 	readfile("css/".$uri);
 }
 else if ($uri == "") {
@@ -29,6 +31,20 @@ else if ($uri == "test") {
 	$pc = new PageBuilder();
 	$pc->debugPost();
 	$pc->printOut();
+}
+else if ($uri == "post") {
+
+	$id = max(1, intval($_GET["id"]));
+	require_once("PageBuilder.php");
+	$pc = new PageBuilder();
+	$pc->singlePost($id);
+	$pc->printOut();
+}
+else if (preg_match("/^entries\/[0-9]+\/([a-zA-Z0-9][\/]?)+\.[A-Za-z]{1,4}$/", $uri)) {
+
+	// A file uploaded with a post should be loaded
+	if(file_exists($uri))
+	readfile($uri);
 }
 else {
 

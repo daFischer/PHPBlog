@@ -30,6 +30,14 @@ class PageBuilder
 		$postArray = DBLoader::loadDebugPost();
 		$this->pageString = str_replace("[posts]", $this->postListSubstitution($postArray), $this->pageString);
 	}
+	public function singlePost($index)
+	{
+		$this->pageString = $this->loadFile("html/singlePost.html", false);
+		$this->defaultSubstitution();
+		require_once("DBLoader.php");
+		$postArray = DBLoader::loadPosts(array($index));
+		$this->pageString = str_replace("[posts]", $this->postListSubstitution($postArray), $this->pageString);
+	}
 
 	public function printOut()
 	{
@@ -58,9 +66,6 @@ class PageBuilder
 	}
 	private function postSubstitution($postString, $values)
 	{
-		$postString = str_replace("[index]", $values["index"], $postString);
-		$postString = str_replace("[title]", $values["title"], $postString);
-		$postString = str_replace("[date]", $values["date"], $postString);
 		$postString = str_replace("[html]", $values["html"], $postString);
 		$replace = "";
 		if ($values["js"] != "")
@@ -70,6 +75,10 @@ class PageBuilder
 		if ($values["css"] != "")
 			$replace = '<style scoped type="text/css">'.$values["css"].'</style>';
 		$postString = str_replace("[css]", $replace, $postString);
+		$postString = str_replace("[index]", $values["index"], $postString);
+		$postString = str_replace("[title]", $values["title"], $postString);
+		$postString = str_replace("[date]", $values["date"], $postString);
+		$postString = str_replace("[dir]", "entries/".$values["index"], $postString);
 		return $postString;
 	}
 	private function loadFile($filename, $autoComplete = true)

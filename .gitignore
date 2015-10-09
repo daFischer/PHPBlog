@@ -2,3 +2,5 @@ config/*.php
 entries/*
 entries/**/*
 !entries/0/*
+*.svg
+*.ico

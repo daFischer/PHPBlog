@@ -24,6 +24,7 @@ body {
 	z-index: 1;
 }
 #footer, #header {
+	overflow-y: hidden;
 	left:0%;
 	right:0%;
 	height: 50px;
@@ -34,7 +35,7 @@ body {
 	font-family: 'Oswald';
 	color: #fff;
 	text-align: center;
-	font-size: 30px;
+	font-size: 20px;
 }
 #footer > span {
 	display: inline-block;
@@ -85,4 +86,19 @@ p {
 	float: right;
 	font-size: 17px;
 	color: #678;
+}
+.headline {
+	color: #000;
+	text-decoration-line: unset;
+}
+.nav-menu>li {
+	display: block;
+	float: left;
+	margin: 0px 20px;
+}
+.nav-menu {
+	margin: 0px;
+}
+.nav-menu-container {
+	display: inline-block;
 }
