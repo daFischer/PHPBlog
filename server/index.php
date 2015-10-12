@@ -1,10 +1,10 @@
 <?php
 // This file handles all requests
-// TODO: It might be a good idea to redirect e.g. css file requests differently
-//  	in the .htaccess file
 
-// Read the URI that was used by the browser
-$uri = substr($_SERVER[REQUEST_URI], 6);
+include 'config.php';
+
+// Read the URI that was used by the browser = '/'.$folder
+$uri = substr($_SERVER[REQUEST_URI], strlen($folder) + 1);
 // Remove set variables from the URI (they're not needed here)
 $uri_end = strpos($uri, '?');
 if ($uri_end !== false)
@@ -23,7 +23,7 @@ else
 	require_once("database/DBLoader.php");
 	if ($uri == "") {
 
-		// Since after '/blog/' there was nothing in the uri, return the frontpage
+		// Since after '/blogfolder/' there was nothing in the uri, return the frontpage
 		$page = $_GET["p"];
 		if (!$page)
 			$page = 1;

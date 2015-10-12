@@ -1,6 +1,6 @@
 <?php
 require_once("LoaderInterface.php");
-require_once("/home/a1304351/blogdatabase/connect.php");
+require_once($directory . "connect.php");
 /**
 *  
 */
