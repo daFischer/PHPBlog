@@ -2,41 +2,45 @@
 /**
 *  This class builds the needed site from predefined html, js and css blocks
 */
+require_once("database/LoaderInterface.php");
+
 class PageBuilder
 {
 	public $pageString;
 	public $hasError;
 	public $errorString;
+	private $loader;
 	
-	function __construct()
+	function __construct(LoaderInterface $loader)
 	{
 		$this->hasError = false;
 		$this->errorString = "";
+		$this->loader = $loader;
 	}
 
-	public function frontpage()
+	public function frontpage($page)
 	{
 		$this->pageString = $this->loadFile("html/frontpage.html", false);
 		$this->defaultSubstitution();
-		require_once("DBLoader.php");
-		$postArray = DBLoader::loadPage(10);
-		$this->pageString = str_replace("[posts]", $this->postListSubstitution($postArray), $this->pageString);
+		$postArray = $this->loader->loadPage(2, $page);
+		$this->pageString = str_replace("[posts]", 
+				$this->postListSubstitution($postArray), $this->pageString);
 	}
-	public function debugPost()
+	/*public function debugPost()
 	{
 		$this->pageString = $this->loadFile("html/debugPost.html", false);
 		$this->defaultSubstitution();
-		require_once("DBLoader.php");
-		$postArray = DBLoader::loadDebugPost();
-		$this->pageString = str_replace("[posts]", $this->postListSubstitution($postArray), $this->pageString);
-	}
+		$postArray = $this->loader->loadDebugPost();
+		$this->pageString = str_replace("[posts]", 
+				$this->postListSubstitution($postArray), $this->pageString);
+	}*/
 	public function singlePost($index)
 	{
 		$this->pageString = $this->loadFile("html/singlePost.html", false);
 		$this->defaultSubstitution();
-		require_once("DBLoader.php");
-		$postArray = DBLoader::loadPosts(array($index));
-		$this->pageString = str_replace("[posts]", $this->postListSubstitution($postArray), $this->pageString);
+		$postArray = $this->loader->loadPosts(array($index));
+		$this->pageString = str_replace("[posts]", 
+				$this->postListSubstitution($postArray), $this->pageString);
 	}
 
 	public function printOut()

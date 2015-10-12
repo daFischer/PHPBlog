@@ -1,11 +1,16 @@
 <?php
-
+require_once("LoaderInterface.php");
 /**
 *  
 */
-class DBLoader
+class FileLoader implements LoaderInterface
 {
-	static public function loadPage($amount)
+	function __construct()
+	{
+
+	}
+	
+	public function loadPage($amount)
 	{
 		$page = $_GET["p"];
 		if (!$page)
@@ -20,7 +25,7 @@ class DBLoader
 
 		return self::loadPosts($dirs);
 	}
-	static public function loadDebugPost()
+	public function loadDebugPost()
 	{
 		$dirs = self::getDirs();
 		// Use the newest post for testing and "0" to make sure nothing's broken
@@ -30,7 +35,7 @@ class DBLoader
 		return self::loadPosts($dirs, true);
 	}
 
-	static public function loadPosts($indices, $debugging = false)
+	public function loadPosts($indices, $debugging = false)
 	{
 		$posts = array();
 		for ($i = 0; $i < sizeof($indices); $i++) {
@@ -61,7 +66,7 @@ class DBLoader
 		return $posts;
 	}
 
-	static private function getDirs()
+	private function getDirs()
 	{
 		// Only use directories for entries that have their index as folder name
 		// and don't load 0, since that's a test post
@@ -77,7 +82,7 @@ class DBLoader
 		usort($dirs, "sortPosts");
 		return $dirs;
 	}
-	static private function creationDate($path)
+	private function creationDate($path)
 	{
 		if(file_exists($path."/publish.time")) {
 			$date = file_get_contents($path."/publish.time");

@@ -7,7 +7,7 @@
 $uri = substr($_SERVER[REQUEST_URI], 6);
 // Remove set variables from the URI (they're not needed here)
 $uri_end = strpos($uri, '?');
-if ($uri_end)
+if ($uri_end !== false)
 	$uri = substr($uri, 0, $uri_end);
 
 if (preg_match("/^[a-zA-Z]+\.css$/", $uri)) {
@@ -17,38 +17,44 @@ if (preg_match("/^[a-zA-Z]+\.css$/", $uri)) {
 	header("X-Content-Type-Options: nosniff");
 	readfile("css/".$uri);
 }
-else if ($uri == "") {
-
-	// Since after '/blog/' there was nothing in the uri, return the frontpage
+else
+{
 	require_once("PageBuilder.php");
-	$pc = new PageBuilder();
-	$pc->frontpage();
-	$pc->printOut();
-}
-else if ($uri == "test") {
+	require_once("database/DBLoader.php");
+	if ($uri == "") {
 
-	require_once("PageBuilder.php");
-	$pc = new PageBuilder();
-	$pc->debugPost();
-	$pc->printOut();
-}
-else if ($uri == "post") {
+		// Since after '/blog/' there was nothing in the uri, return the frontpage
+		$page = $_GET["p"];
+		if (!$page)
+			$page = 1;
 
-	$id = max(1, intval($_GET["id"]));
-	require_once("PageBuilder.php");
-	$pc = new PageBuilder();
-	$pc->singlePost($id);
-	$pc->printOut();
-}
-else if (preg_match("/^entries\/[0-9]+\/([a-zA-Z0-9][\/]?)+\.[A-Za-z]{1,4}$/", $uri)) {
+		$pc = new PageBuilder(new DBLoader());
+		$pc->frontpage($page);
+		$pc->printOut();
+	}
+	/*else if ($uri == "test") {
 
-	// A file uploaded with a post should be loaded
-	if(file_exists($uri))
-	readfile($uri);
-}
-else {
+		$pc = new PageBuilder(new DBLoader());
+		$pc->debugPost();
+		$pc->printOut();
+	}*/
+	else if ($uri == "post") {
 
-	// The requested file is not (yet) accessible, so throw a 404 error
-	require("errors/404.php");
+		$id = max(1, intval($_GET["id"]));
+		$pc = new PageBuilder(new DBLoader());
+		$pc->singlePost($id);
+		$pc->printOut();
+	}
+	else if (preg_match("/^entries\/[0-9]+\/([a-zA-Z0-9][\/]?)+\.[A-Za-z]{1,4}$/", $uri)) {
+
+		// A file uploaded with a post should be loaded
+		if(file_exists($uri))
+		readfile($uri);
+	}
+	else {
+
+		// The requested file is not (yet) accessible, so throw a 404 error
+		require("errors/404.php");
+	}
 }
 ?>
