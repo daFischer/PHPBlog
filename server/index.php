@@ -17,12 +17,6 @@ if (preg_match("/^[a-zA-Z]+\.css$/", $uri)) {
 	header("X-Content-Type-Options: nosniff");
 	readfile("css/".$uri);
 }
-else if (preg_match("/^entries\/([0-9]+|new)\/([a-zA-Z0-9][\/]?)+\.[A-Za-z]{1,4}$/", $uri)) {
-
-	// A file uploaded with a post should be loaded
-	if(file_exists($uri))
-	readfile($uri);
-}
 else
 {
 	require_once("PageBuilder.php");
@@ -34,22 +28,28 @@ else
 		if (!$page)
 			$page = 1;
 
-		$pb = new PageBuilder(new DBLoader());
-		$pb->frontpage($page);
-		$pb->printOut();
+		$pc = new PageBuilder(new DBLoader());
+		$pc->frontpage($page);
+		$pc->printOut();
 	}
-	else if ($uri == "test") {
+	/*else if ($uri == "test") {
 
-		$pb = new PageBuilder(new DBLoader());
-		$pb->debugPost();
-		$pb->printOut();
-	}
+		$pc = new PageBuilder(new DBLoader());
+		$pc->debugPost();
+		$pc->printOut();
+	}*/
 	else if ($uri == "post") {
 
 		$id = max(1, intval($_GET["id"]));
-		$pb = new PageBuilder(new DBLoader());
-		$pb->singlePost($id);
-		$pb->printOut();
+		$pc = new PageBuilder(new DBLoader());
+		$pc->singlePost($id);
+		$pc->printOut();
+	}
+	else if (preg_match("/^entries\/[0-9]+\/([a-zA-Z0-9][\/]?)+\.[A-Za-z]{1,4}$/", $uri)) {
+
+		// A file uploaded with a post should be loaded
+		if(file_exists($uri))
+		readfile($uri);
 	}
 	else {
 

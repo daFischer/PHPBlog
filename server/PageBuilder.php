@@ -26,14 +26,14 @@ class PageBuilder
 		$this->pageString = str_replace("[posts]", 
 				$this->postListSubstitution($postArray), $this->pageString);
 	}
-	public function debugPost()
+	/*public function debugPost()
 	{
 		$this->pageString = $this->loadFile("html/debugPost.html", false);
 		$this->defaultSubstitution();
 		$postArray = $this->loader->loadDebugPost();
 		$this->pageString = str_replace("[posts]", 
 				$this->postListSubstitution($postArray), $this->pageString);
-	}
+	}*/
 	public function singlePost($index)
 	{
 		$this->pageString = $this->loadFile("html/singlePost.html", false);
