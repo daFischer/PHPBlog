@@ -60,7 +60,7 @@ class DBLoader implements LoaderInterface
 		for ($i = 0; $i < sizeof($sqlResult); $i++) {
 			$id = $sqlResult[$i]["Id"];
 			$title = $sqlResult[$i]["Name"];
-			$date = $sqlResult[$i]["When"];
+			$date = date("j\. M\. y", strtotime($sqlResult[$i]["When"]));
 			$js = "";
 			if (file_exists("./entries/".$id."/Post.js"))
 				$js = file_get_contents("./entries/".$id."/Post.js");
