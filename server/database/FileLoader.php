@@ -10,9 +10,8 @@ class FileLoader implements LoaderInterface
 
 	}
 	
-	public function loadPage($amount)
+	public function loadPage($amount, $page)
 	{
-		$page = $_GET["p"];
 		if (!$page)
 			$page = 1;
 
@@ -27,12 +26,24 @@ class FileLoader implements LoaderInterface
 	}
 	public function loadDebugPost()
 	{
-		$dirs = self::getDirs();
-		// Use the newest post for testing and "0" to make sure nothing's broken
-		$a = array_shift($dirs);
-		$dirs = array($a, "0");
+		$posts = array();
+		if (file_exists("./entries/new/title.txt"))
+			$posts[] = array(
+				'index' => "new",
+				'title' => file_get_contents("./entries/new/title.txt"),
+				'date' => date("j\. M\. y"),
+				'html' => file_get_contents("./entries/new/Post.html"),
+				'js' => file_get_contents("./entries/new/Post.js"),
+				'css' => file_get_contents("./entries/new/Post.css"));
+		$posts[] = array(
+			'index' => 0,
+			'title' => "Old",
+			'date' => "13. Jan. 37",
+			'html' => file_get_contents("./entries/0/Post.html"),
+			'js' => file_get_contents("./entries/0/Post.js"),
+			'css' => file_get_contents("./entries/0/Post.css"));
 
-		return self::loadPosts($dirs, true);
+		return $posts;
 	}
 
 	public function loadPosts($indices, $debugging = false)
@@ -74,7 +85,6 @@ class FileLoader implements LoaderInterface
 			return is_dir("./entries/".$a) && ((intval($a) != 0));
 		}
 		$dirs = array_values(array_filter(scandir("./entries"), "isDir"));
-
 		// sort all posts, putting the newest posts in the front
 		function sortPosts($a, $b) {
 			return intval($b) - intval($a);

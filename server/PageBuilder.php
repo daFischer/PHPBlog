@@ -25,15 +25,17 @@ class PageBuilder
 		$postArray = $this->loader->loadPage(2, $page);
 		$this->pageString = str_replace("[posts]", 
 				$this->postListSubstitution($postArray), $this->pageString);
+		$this->finalSubstitution();
 	}
-	/*public function debugPost()
+	public function debugPost()
 	{
 		$this->pageString = $this->loadFile("html/debugPost.html", false);
 		$this->defaultSubstitution();
 		$postArray = $this->loader->loadDebugPost();
 		$this->pageString = str_replace("[posts]", 
 				$this->postListSubstitution($postArray), $this->pageString);
-	}*/
+		$this->finalSubstitution();
+	}
 	public function singlePost($index)
 	{
 		$this->pageString = $this->loadFile("html/singlePost.html", false);
@@ -41,6 +43,7 @@ class PageBuilder
 		$postArray = $this->loader->loadPosts(array($index));
 		$this->pageString = str_replace("[posts]", 
 				$this->postListSubstitution($postArray), $this->pageString);
+		$this->finalSubstitution();
 	}
 
 	public function printOut()
@@ -56,6 +59,11 @@ class PageBuilder
 		$this->pageString = str_replace("[footer]", $this->loadFile("footer.html"), $this->pageString);
 		$this->pageString = str_replace("[main]", $this->loadFile("main.html"), $this->pageString);
 		$this->pageString = str_replace("[head]", $this->loadFile("head.html"), $this->pageString);
+	}
+	private function finalSubstitution()
+	{
+		require 'config.php';
+		$this->pageString = str_replace("[folder]", $folder, $this->pageString);
 	}
 	private function postListSubstitution($array)
 	{

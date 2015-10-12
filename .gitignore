@@ -1,4 +1,5 @@
 config/*.php
+config.php
 server/entries/*
 server/entries/**/*
 !entries/0/*
