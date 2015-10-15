@@ -22,7 +22,7 @@ class PageBuilder
 	{
 		$this->pageString = $this->loadFile("html/frontpage.html", false);
 		$this->defaultSubstitution();
-		$postArray = $this->loader->loadPage(2, $page);
+		$postArray = $this->loader->loadPage(5, $page);
 		$this->pageString = str_replace("[posts]", 
 				$this->postListSubstitution($postArray), $this->pageString);
 		$this->finalSubstitution();

@@ -1,4 +1,5 @@
 <?php
+require 'config.php';
 require_once("LoaderInterface.php");
 require_once($directory . "connect.php");
 /**
@@ -7,10 +8,18 @@ require_once($directory . "connect.php");
 class DBLoader implements LoaderInterface
 {
 	private $pdo;
+	private static $loader;
 
 	function __construct()
 	{
 		$this->pdo = pdoConnect();
+	}
+
+	public static function getInstance()
+	{
+		if (!self::$loader)
+			self::$loader = new DBLoader();
+		return self::$loader;
 	}
 
 	public function loadPage($amount, $page)
@@ -64,6 +73,15 @@ class DBLoader implements LoaderInterface
 		$result = $statement->fetchAll();
 
 		return self::openPosts($result);
+	}
+
+	public function insertPost($name)
+	{
+		$statement = $this->pdo->prepare("
+			INSERT INTO Entry (name) VALUES (:param)
+			");
+		$statement->execute(array(":param" => $name));
+		return $this->pdo->lastInsertId();
 	}
 
 	private function openPosts($sqlResult)
