@@ -12,15 +12,15 @@ if ($uri_end !== false)
 	$uri = substr($uri, 0, $uri_end);
 
 // Is there a new post that can be added to the DB?
-if (file_exists("entries/new") && file_exists("entries/new/title.txt") && !$testing) {
+if (file_exists("entries/new") && file_exists("entries/new/title.txt") &&!$testing) {
 
 	// Find out the name and delete the file containing it
 	$name = file_get_contents("entries/new/title.txt");
 	unlink("entries/new/title.txt");
 
 	// Insert the new post to the DB
-	require_once("database/DBLoader.php");
-	$db = DBLoader::getInstance();
+	require_once("database/CacheLoader.php");
+	$db = CacheLoader::getInstance();
 	$newId = $db->insertPost($name);
 
 	// Rename the folder containing the post's files to its id

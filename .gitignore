@@ -5,3 +5,4 @@ server/entries/**/*
 !entries/0/*
 *.svg
 *.ico
+*.sublime-*

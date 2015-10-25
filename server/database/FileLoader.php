@@ -45,7 +45,6 @@ class FileLoader implements LoaderInterface
 
 		return $posts;
 	}
-
 	public function loadPosts($indices, $debugging = false)
 	{
 		$posts = array();
@@ -73,6 +72,22 @@ class FileLoader implements LoaderInterface
 				'html' => file_get_contents("./entries/".$id."/".$title.".html"),
 				'js' => $js,
 				'css' => $css);
+		}
+		return $posts;
+	}
+	public function searchPosts($tags)
+	{
+		$dirs = self::getDirs();
+		$posts = array();
+		for ($i = 0; $i < sizeof($dirs); $i++) { 
+			$postHtml = file_get_contents($dirs[$i]);
+			for ($j = 0; $j < sizeof($tags); $j++) { 
+				if (strpos($postHtml, $tags[$j]) == false)
+					break;
+				if($j == sizeof($tags) - 1) {
+					$posts[] = intval($dirs[$i]);
+				}
+			}
 		}
 		return $posts;
 	}

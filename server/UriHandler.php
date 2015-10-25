@@ -24,8 +24,8 @@ function handleUri($uri)
 			require_once("database/FileLoader.php");
 			$pc = new PageBuilder(new FileLoader());
 		} else {
-			require_once("database/DBLoader.php");
-			$pc = new PageBuilder(DBLoader::getInstance());
+			require_once("database/CacheLoader.php");
+			$pc = new PageBuilder(CacheLoader::getInstance());
 		}
 		if ($uri == "") {
 
