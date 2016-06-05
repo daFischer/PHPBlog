@@ -45,6 +45,15 @@ class PageBuilder
 				$this->postListSubstitution($postArray), $this->pageString);
 		$this->finalSubstitution();
 	}
+	public function search($term)
+	{
+		$this->pageString = $this->loadFile("html/search.html", false);
+		$this->defaultSubstitution();
+		$postArray = $this->loader->searchPosts(array($index));
+		$this->pageString = str_replace("[posts]", 
+				$this->postListSubstitution($postArray), $this->pageString);
+		$this->finalSubstitution();
+	}
 
 	public function printOut()
 	{

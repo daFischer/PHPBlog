@@ -63,7 +63,7 @@ class DBLoader implements LoaderInterface
 
 	public function loadPosts($indices)
 	{
-		$placeholders = str_repeat ('?, ',  count ($indices) - 1) . '?';
+		$placeholders = str_repeat ('?, ',  count($indices) - 1) . '?';
 		$statement = $this->pdo->prepare("
 			SELECT * FROM Entry
 			WHERE IsPublished AND

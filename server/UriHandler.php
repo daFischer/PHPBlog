@@ -15,7 +15,7 @@ function handleUri($uri)
 
 		// A file uploaded with a post should be loaded
 		if(file_exists($uri))
-		readfile($uri);
+			readfile($uri);
 	}
 	else
 	{
@@ -30,11 +30,21 @@ function handleUri($uri)
 		if ($uri == "") {
 
 			// Since after '/blogfolder/' there was nothing in the uri, return the frontpage
-			$page = $_GET["p"];
-			if (!$page)
+			if (isset($_GET["p"]))
+				$page = $_GET["p"];
+			else
 				$page = 1;
 
 			$pc->frontpage($page);
+			$pc->printOut();
+		}
+		else if ($uri == "search") {
+			if (!isset($_GET["string"])) {
+				header("Location: /" . $folder);
+				exit();
+			}
+			$search = $_GET["string"];
+			$pc->search();
 			$pc->printOut();
 		}
 		else if ($uri == "test" && $testing) {

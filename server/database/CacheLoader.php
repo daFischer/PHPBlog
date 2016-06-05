@@ -56,17 +56,19 @@ class CacheLoader implements LoaderInterface
 			$result[] = $r;
 
 			// If posts aren't cached, we'll have to load them afterwards
-			if (!$r)
+			if ($r === false)
 				$remaining[] = $index;
 		}
 
 		// Load missing posts if any
-		if (sizeof($remaining > 0)) {
+		if (count($remaining) > 0) {
 			$subResult = $this->subLoader->loadPosts($remaining);
-			for ($i=0; $i < sizeof($result); $i++)
-				if (!$result[i]) {
-					$result[i] = $subResult.array_shift();
-					Cache::save("loadPost" . $i, $result[i]);
+			// Missing posts are loaded
+			// now they need to be inserted at the right places
+			for ($i = 0; $i < count($result); $i++)
+				if ($result[$i] === false) {
+					$result[$i] = array_shift($subResult);
+					Cache::save("loadPost" . array_shift($remaining), $result[$i]);
 				}
 		}
 
